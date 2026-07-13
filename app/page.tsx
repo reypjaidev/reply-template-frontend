@@ -1,5 +1,5 @@
-import { NoteBoard } from "./_components/NoteBoard";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <NoteBoard />;
+  redirect("/sign-in");
 }

@@ -6,8 +6,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={``}>
-      <body className="min-h-full flex flex-col bg-neutral-50">{children}</body>
+    <html lang="en">
+      <body className="h-screen w-screen bg-neutral-900">{children}</body>
     </html>
   );
 }
