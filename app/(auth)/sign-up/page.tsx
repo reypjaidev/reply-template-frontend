@@ -1,16 +1,32 @@
 "use client";
+
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRegisterMutation } from "../../lib/redux/features/auth/authApi";
+import { getErrorMessage } from "../../lib/redux/features/auth/getErrorMessage";
 import { Form } from "../components/Form";
 import EmailIcon from "../components/icons/EmailIcon";
 import PasswordIcon from "../components/icons/PasswordIcon";
 import UserIcon from "../components/icons/UserIcon";
 
 function Page() {
+  const router = useRouter();
+  const [register, { isLoading }] = useRegisterMutation();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    console.log("Form submitted", e);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      await register({ name, email, password }).unwrap();
+      router.push("/");
+    } catch (err) {
+      setError(getErrorMessage(err));
+    }
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +42,11 @@ function Page() {
   };
 
   return (
-    <Form.Form isLogin={false} handleSubmit={handleSubmit}>
+    <Form.Form
+      isLogin={false}
+      handleSubmit={handleSubmit}
+      isSubmitting={isLoading}
+    >
       <Form.Input
         placeholder="Name"
         onChange={handleNameChange}
@@ -49,6 +69,7 @@ function Page() {
         type="password"
         value={password}
       />
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
     </Form.Form>
   );
 }

@@ -5,6 +5,7 @@ interface FormContainerProps {
   handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
   isLogin: boolean;
+  isSubmitting?: boolean;
 }
 
 interface FormInputProps {
@@ -20,6 +21,7 @@ const FormContainer = ({
   handleSubmit,
   children,
   isLogin,
+  isSubmitting = false,
 }: FormContainerProps) => {
   return (
     <form
@@ -47,12 +49,13 @@ const FormContainer = ({
       )}
       <button
         type="submit"
+        disabled={isSubmitting}
         className={cslx(
-          "w-full h-11 rounded-full text-white bg-indigo-600 hover:bg-indigo-500 transition",
+          "w-full h-11 rounded-full text-white bg-indigo-600 hover:bg-indigo-500 transition disabled:cursor-not-allowed disabled:opacity-60",
           isLogin ? "mt-2" : "mt-4",
         )}
       >
-        {isLogin ? "Login" : "Sign up"}
+        {isSubmitting ? "Please wait…" : isLogin ? "Login" : "Sign up"}
       </button>
 
       <Link
