@@ -1,13 +1,17 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useNotes } from "../_lib/useNotes";
+import { useLogoutMutation } from "../lib/redux/features/auth/authApi";
 import { NoteCard } from "./NoteCard";
 import { NoteComposer } from "./NoteComposer";
 
 export function NoteBoard() {
   const { notes, loaded, addNote, updateNote, deleteNote } = useNotes();
   const [query, setQuery] = useState("");
+  const router = useRouter();
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -19,9 +23,24 @@ export function NoteBoard() {
     );
   }, [notes, query]);
 
+  async function handleLogout() {
+    await logout();
+    router.replace("/sign-in");
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
       <header className="mb-8 text-center">
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-500 transition-colors hover:bg-black/5 hover:text-neutral-800 disabled:opacity-60"
+          >
+            {isLoggingOut ? "Logging out…" : "Log out"}
+          </button>
+        </div>
         <h1 className="text-2xl font-semibold text-neutral-800">
           Reply Board
         </h1>

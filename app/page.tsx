@@ -1,5 +1,10 @@
-import { redirect } from "next/navigation";
+import { NoteBoard } from "./_components/NoteBoard";
+import { RequireAuth } from "./lib/redux/features/auth/RequireAuth";
 
 export default function Home() {
-  redirect("/sign-in");
+  return (
+    <RequireAuth>
+      <NoteBoard />
+    </RequireAuth>
+  );
 }
