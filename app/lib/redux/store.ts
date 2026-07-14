@@ -1,4 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./features/auth/authSlice";
+import { authApi } from "./features/auth/authApi";
 
 // A factory instead of a module-level singleton: Next.js runs Server
 // Components per-request on the server, so a shared store would leak
@@ -6,7 +8,12 @@ import { configureStore } from "@reduxjs/toolkit";
 // browser session instead.
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      auth: authReducer,
+      [authApi.reducerPath]: authApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(authApi.middleware),
   });
 };
 
