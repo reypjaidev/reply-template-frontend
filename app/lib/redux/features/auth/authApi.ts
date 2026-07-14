@@ -1,10 +1,4 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  type BaseQueryFn,
-  type FetchArgs,
-  type FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import { api } from "../../api";
 import { credentialsSet, credentialsCleared, type AuthUser } from "./authSlice";
 
 // Matches backend's utils/response.ts sendSuccess() envelope.
@@ -21,44 +15,7 @@ type LoginRequest = {
   password: string;
 };
 
-const rawBaseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL, // e.g. http://localhost:4000/api/v1
-  // accessToken/refreshToken are httpOnly cookies — this is what makes the
-  // browser attach and update them automatically, there's nothing to store
-  // or attach as a header on our end.
-  credentials: "include",
-});
-
-// On a 401, hit /auth/refresh (rotates the httpOnly cookies) and retry the
-// original request once before giving up and clearing the session.
-const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
-  let result = await rawBaseQuery(args, api, extraOptions);
-
-  if (result.error?.status === 401) {
-    const refreshResult = await rawBaseQuery(
-      { url: "/auth/refresh", method: "POST" },
-      api,
-      extraOptions
-    );
-
-    if (refreshResult.data) {
-      result = await rawBaseQuery(args, api, extraOptions);
-    } else {
-      api.dispatch(credentialsCleared());
-    }
-  }
-
-  return result;
-};
-
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ["CurrentUser"],
+export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<{ user: AuthUser }, RegisterRequest>({
       query: (body) => ({ url: "/auth/register", method: "POST", body }),
