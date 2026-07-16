@@ -43,6 +43,7 @@ function Page() {
         icon={<EmailIcon />}
         name="email"
         value={email}
+        type="email"
       />
       <Form.Input
         placeholder="Password"

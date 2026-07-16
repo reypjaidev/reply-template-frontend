@@ -12,7 +12,7 @@ interface FormInputProps {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: "text" | "password";
+  type?: "text" | "password" | "email";
   name: string;
   icon: React.ReactNode;
 }
@@ -80,8 +80,9 @@ const FormInput = ({
   return (
     <div className="flex items-center w-full mt-4 bg-white/5 ring-2 ring-white/10 focus-within:ring-indigo-500/60 h-12 rounded-full overflow-hidden pl-6 gap-2 transition-all">
       {icon}
-      <label htmlFor={name} className="sr-only" />
+      <label htmlFor={name} aria-label={name} className="sr-only" />
       <input
+        id={name}
         type={type}
         name={name}
         placeholder={placeholder}
