@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SignInPage from "./page";
 
@@ -38,5 +39,45 @@ describe("SignInPage", () => {
     expect(
       screen.getByRole("link", { name: /don't have an account?/i }),
     ).toBeInTheDocument();
+  });
+
+  it("Should redirect to / after a successful login", async () => {
+    const user = userEvent.setup();
+    mockLogin.mockReturnValue({
+      unwrap: vi.fn().mockResolvedValue({ user: { id: "1", name: "Test", email: "test@example.com" } }),
+    });
+
+    render(<SignInPage />);
+
+    await user.type(screen.getByLabelText(/email/i), "test@example.com");
+    await user.type(screen.getByLabelText(/password/i), "password123");
+    await user.click(screen.getByRole("button", { name: "Login" }));
+
+    expect(mockLogin).toHaveBeenCalledWith({
+      email: "test@example.com",
+      password: "password123",
+    });
+    await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/"));
+  });
+
+  it("Should not redirect and should show an error when login fails", async () => {
+    const user = userEvent.setup();
+    mockLogin.mockReturnValue({
+      unwrap: vi
+        .fn()
+        .mockRejectedValue({
+          status: 401,
+          data: { success: false, error: "Invalid credentials" },
+        }),
+    });
+
+    render(<SignInPage />);
+
+    await user.type(screen.getByLabelText(/email/i), "test@example.com");
+    await user.type(screen.getByLabelText(/password/i), "wrong-password");
+    await user.click(screen.getByRole("button", { name: "Login" }));
+
+    await waitFor(() => expect(screen.getByText("Invalid credentials")).toBeInTheDocument());
+    expect(mockRouter.push).not.toHaveBeenCalled();
   });
 });
