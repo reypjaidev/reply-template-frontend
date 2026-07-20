@@ -34,7 +34,8 @@ describe("SignUpPage", () => {
     expect(screen.getByText("Please sign up to continue")).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("password")).toBeInTheDocument();
+    expect(screen.getByLabelText("confirmPassword")).toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();
     expect(
@@ -54,7 +55,8 @@ describe("SignUpPage", () => {
 
     await user.type(screen.getByLabelText(/name/i), "test");
     await user.type(screen.getByLabelText(/email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/password/i), "password123");
+    await user.type(screen.getByLabelText("password"), "password123");
+    await user.type(screen.getByLabelText("confirmPassword"), "password123");
     await user.click(screen.getByRole("button", { name: "Sign up" }));
 
     expect(mockRegister).toHaveBeenCalledWith({
@@ -63,6 +65,24 @@ describe("SignUpPage", () => {
       password: "password123",
     });
     await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/"));
+  });
+
+  it("Should show an error and not call register when passwords don't match", async () => {
+    const user = userEvent.setup();
+
+    render(<SignUpPage />);
+
+    await user.type(screen.getByLabelText(/name/i), "test");
+    await user.type(screen.getByLabelText(/email/i), "test@example.com");
+    await user.type(screen.getByLabelText("password"), "password123");
+    await user.type(screen.getByLabelText("confirmPassword"), "different123");
+    await user.click(screen.getByRole("button", { name: "Sign up" }));
+
+    expect(
+      await screen.findByText("Passwords do not match"),
+    ).toBeInTheDocument();
+    expect(mockRegister).not.toHaveBeenCalled();
+    expect(mockRouter.push).not.toHaveBeenCalled();
   });
 
   it("Should not redirect and should show an error when Sign up fails", async () => {
@@ -77,7 +97,8 @@ describe("SignUpPage", () => {
     render(<SignUpPage />);
     await user.type(screen.getByLabelText(/name/i), "test");
     await user.type(screen.getByLabelText(/email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/password/i), "password123");
+    await user.type(screen.getByLabelText("password"), "password123");
+    await user.type(screen.getByLabelText("confirmPassword"), "password123");
     await user.click(screen.getByRole("button", { name: "Sign up" }));
 
     await waitFor(() =>
