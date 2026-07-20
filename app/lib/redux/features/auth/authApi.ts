@@ -21,6 +21,11 @@ export const authApi = api.injectEndpoints({
       query: (body) => ({ url: "/auth/register", method: "POST", body }),
       transformResponse: (response: ApiEnvelope<{ user: AuthUser }>) =>
         response.data,
+      // Forces any mounted getCurrentUser subscriber (RequireAuth,
+      // RedirectIfAuthed, AuthInitializer) to refetch instead of reading a
+      // stale cached result from before this login/register — e.g. the
+      // errored state left behind by a previous logout.
+      invalidatesTags: ["CurrentUser"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(credentialsSet(data));
@@ -30,6 +35,7 @@ export const authApi = api.injectEndpoints({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       transformResponse: (response: ApiEnvelope<{ user: AuthUser }>) =>
         response.data,
+      invalidatesTags: ["CurrentUser"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(credentialsSet(data));

@@ -8,6 +8,11 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    // Node's fetch (unlike a browser) needs an absolute base URL —
+    // fetchBaseQuery reads this at import time in app/lib/redux/api.ts.
+    env: {
+      NEXT_PUBLIC_API_URL: "http://localhost:4000/api/v1",
+    },
   },
   resolve: {
     alias: {
