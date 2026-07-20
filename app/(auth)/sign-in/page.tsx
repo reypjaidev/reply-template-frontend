@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLoginMutation } from "../../lib/redux/features/auth/authApi";
 import { getErrorMessage } from "../../lib/redux/features/auth/getErrorMessage";
+import { signInSchema } from "../../lib/validation/authSchemas";
 import { Form } from "../components/Form";
 import EmailIcon from "../components/icons/EmailIcon";
 import PasswordIcon from "../components/icons/PasswordIcon";
@@ -19,8 +20,15 @@ function Page() {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
+    const result = signInSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     try {
-      await login({ email, password }).unwrap();
+      await login(result.data).unwrap();
       router.push("/");
     } catch (err) {
       setError(getErrorMessage(err));
