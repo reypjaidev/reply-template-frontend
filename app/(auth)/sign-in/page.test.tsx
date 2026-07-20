@@ -31,7 +31,7 @@ describe("SignInPage", () => {
     expect(screen.getByRole("heading", { name: "Login" })).toBeInTheDocument();
     expect(screen.getByText("Please sign in to continue")).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText("password")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /forget password/i }),
     ).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("SignInPage", () => {
     render(<SignInPage />);
 
     await user.type(screen.getByLabelText(/email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/password/i), "password123");
+    await user.type(screen.getByLabelText("password"), "password123");
     await user.click(screen.getByRole("button", { name: "Login" }));
 
     expect(mockLogin).toHaveBeenCalledWith({
@@ -74,7 +74,7 @@ describe("SignInPage", () => {
     render(<SignInPage />);
 
     await user.type(screen.getByLabelText(/email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/password/i), "wrong-password");
+    await user.type(screen.getByLabelText("password"), "wrong-password");
     await user.click(screen.getByRole("button", { name: "Login" }));
 
     await waitFor(() => expect(screen.getByText("Invalid credentials")).toBeInTheDocument());

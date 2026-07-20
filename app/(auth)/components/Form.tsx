@@ -1,5 +1,8 @@
 import cslx from "clsx";
 import Link from "next/link";
+import { useState } from "react";
+import EyeIcon from "./icons/EyeIcon";
+import EyeOffIcon from "./icons/EyeOffIcon";
 
 interface FormContainerProps {
   handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
@@ -77,13 +80,17 @@ const FormInput = ({
   placeholder,
   icon,
 }: FormInputProps) => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword && passwordVisible ? "text" : type;
+
   return (
-    <div className="flex items-center w-full mt-4 bg-white/5 ring-2 ring-white/10 focus-within:ring-indigo-500/60 h-12 rounded-full overflow-hidden pl-6 gap-2 transition-all">
+    <div className="flex items-center w-full mt-4 bg-white/5 ring-2 ring-white/10 focus-within:ring-indigo-500/60 h-12 rounded-full overflow-hidden pl-6 pr-4 gap-2 transition-all">
       {icon}
       <label htmlFor={name} aria-label={name} className="sr-only" />
       <input
         id={name}
-        type={type}
+        type={inputType}
         name={name}
         placeholder={placeholder}
         className="w-full bg-transparent text-white placeholder-white/60 border-none outline-none"
@@ -91,6 +98,16 @@ const FormInput = ({
         onChange={onChange}
         required
       />
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setPasswordVisible((v) => !v)}
+          aria-label={`${passwordVisible ? "Hide" : "Show"} ${placeholder}`}
+          className="shrink-0 text-white/60 hover:text-white/90 transition-colors"
+        >
+          {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
+        </button>
+      )}
     </div>
   );
 };
