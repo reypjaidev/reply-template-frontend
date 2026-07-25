@@ -7,14 +7,14 @@ import { api } from "./api";
 // state across requests/users. StoreProvider calls this once per
 // browser session instead.
 export const makeStore = () => {
-  return configureStore({
-    reducer: {
-      auth: authReducer,
-      [api.reducerPath]: api.reducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
-  });
+    return configureStore({
+        reducer: {
+            auth: authReducer,
+            [api.reducerPath]: api.reducer,
+        },
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(api.middleware),
+    });
 };
 
 export type AppStore = ReturnType<typeof makeStore>;

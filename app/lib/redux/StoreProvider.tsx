@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { makeStore, type AppStore } from "./store";
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
-  const [store] = useState<AppStore>(() => makeStore());
+    const [store] = useState<AppStore>(() => makeStore());
 
-  return <Provider store={store}>{children}</Provider>;
+    return <Provider store={store}>{children}</Provider>;
 }

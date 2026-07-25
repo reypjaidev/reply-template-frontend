@@ -4,85 +4,91 @@ import { useRef, useState } from "react";
 import { NOTE_COLOR_ORDER, NOTE_COLORS, type NoteColor } from "../_lib/types";
 
 export function NoteComposer({
-  onCreate,
+    onCreate,
 }: {
-  onCreate: (input: { title: string; body: string; color: NoteColor }) => void;
+    onCreate: (input: {
+        title: string;
+        body: string;
+        color: NoteColor;
+    }) => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [color, setColor] = useState<NoteColor>("gray");
-  const containerRef = useRef<HTMLDivElement>(null);
+    const [expanded, setExpanded] = useState(false);
+    const [title, setTitle] = useState("");
+    const [body, setBody] = useState("");
+    const [color, setColor] = useState<NoteColor>("gray");
+    const containerRef = useRef<HTMLDivElement>(null);
 
-  function reset() {
-    setTitle("");
-    setBody("");
-    setColor("gray");
-    setExpanded(false);
-  }
-
-  function handleSave() {
-    if (!title.trim() && !body.trim()) {
-      reset();
-      return;
+    function reset() {
+        setTitle("");
+        setBody("");
+        setColor("gray");
+        setExpanded(false);
     }
-    onCreate({ title: title.trim(), body, color });
-    reset();
-  }
 
-  function handleBlur(e: React.FocusEvent<HTMLDivElement>) {
-    if (!containerRef.current?.contains(e.relatedTarget as Node)) {
-      handleSave();
+    function handleSave() {
+        if (!title.trim() && !body.trim()) {
+            reset();
+            return;
+        }
+        onCreate({ title: title.trim(), body, color });
+        reset();
     }
-  }
 
-  return (
-    <div
-      ref={containerRef}
-      onBlur={handleBlur}
-      className="mx-auto mb-8 max-w-xl rounded-lg border border-neutral-200 bg-white p-3 shadow-sm"
-    >
-      {expanded && (
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Title"
-          className="mb-1 w-full bg-transparent text-sm font-semibold text-neutral-800 placeholder:text-neutral-400 focus:outline-none"
-        />
-      )}
-      <textarea
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        onFocus={() => setExpanded(true)}
-        placeholder="Take a note... paste a reply template"
-        rows={expanded ? 4 : 1}
-        className="w-full resize-none bg-transparent text-sm text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
-      />
+    function handleBlur(e: React.FocusEvent<HTMLDivElement>) {
+        if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+            handleSave();
+        }
+    }
 
-      {expanded && (
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex gap-1.5">
-            {NOTE_COLOR_ORDER.map((c) => (
-              <button
-                key={c}
-                type="button"
-                aria-label={c}
-                onClick={() => setColor(c)}
-                className={`h-5 w-5 rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
-                  c === color ? "outline outline-2 outline-neutral-400" : ""
-                }`}
-              />
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="rounded-md bg-neutral-800 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-700"
-          >
-            Save
-          </button>
+    return (
+        <div
+            ref={containerRef}
+            onBlur={handleBlur}
+            className="mx-auto mb-8 max-w-xl rounded-lg border border-neutral-200 bg-white p-3 shadow-sm"
+        >
+            {expanded && (
+                <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Title"
+                    className="mb-1 w-full bg-transparent text-sm font-semibold text-neutral-800 placeholder:text-neutral-400 focus:outline-none"
+                />
+            )}
+            <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                onFocus={() => setExpanded(true)}
+                placeholder="Take a note... paste a reply template"
+                rows={expanded ? 4 : 1}
+                className="w-full resize-none bg-transparent text-sm text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
+            />
+
+            {expanded && (
+                <div className="mt-2 flex items-center justify-between">
+                    <div className="flex gap-1.5">
+                        {NOTE_COLOR_ORDER.map((c) => (
+                            <button
+                                key={c}
+                                type="button"
+                                aria-label={c}
+                                onClick={() => setColor(c)}
+                                className={`h-5 w-5 rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
+                                    c === color
+                                        ? "outline outline-2 outline-neutral-400"
+                                        : ""
+                                }`}
+                            />
+                        ))}
+                    </div>
+                    <button
+                        type="button"
+                        onClick={handleSave}
+                        className="rounded-md bg-neutral-800 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-700"
+                    >
+                        Save
+                    </button>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }

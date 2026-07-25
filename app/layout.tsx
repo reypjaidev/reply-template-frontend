@@ -4,18 +4,18 @@ import { StoreProvider } from "./lib/redux/StoreProvider";
 import { AuthInitializer } from "./lib/redux/features/auth/AuthInitializer";
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className="h-screen w-screen bg-neutral-900">
-        <StoreProvider>
-          <AuthInitializer>{children}</AuthInitializer>
-        </StoreProvider>
-        <Background />
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body className="h-screen w-screen bg-neutral-900">
+                <StoreProvider>
+                    <AuthInitializer>{children}</AuthInitializer>
+                </StoreProvider>
+                <Background />
+            </body>
+        </html>
+    );
 }

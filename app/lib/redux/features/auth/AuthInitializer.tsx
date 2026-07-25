@@ -7,6 +7,6 @@ import { useGetCurrentUserQuery } from "./authApi";
 // onQueryStarted in authApi populates the auth slice on success, and a 401
 // here is a normal "not logged in" state, not an error to surface.
 export function AuthInitializer({ children }: { children: React.ReactNode }) {
-  useGetCurrentUserQuery();
-  return <>{children}</>;
+    useGetCurrentUserQuery();
+    return <>{children}</>;
 }

@@ -9,22 +9,22 @@ import { useGetCurrentUserQuery } from "./authApi";
 // a server-side check can't see the backend's cookie once frontend/backend
 // live on different domains, so this is the one check that works in prod too.
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const { isLoading, isError, isSuccess } = useGetCurrentUserQuery();
+    const router = useRouter();
+    const { isLoading, isError, isSuccess } = useGetCurrentUserQuery();
 
-  useEffect(() => {
-    if (isError) router.replace("/sign-in");
-  }, [isError, router]);
+    useEffect(() => {
+        if (isError) router.replace("/sign-in");
+    }, [isError, router]);
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-950">
-        <p className="text-sm text-neutral-500">Loading…</p>
-      </div>
-    );
-  }
+    if (isLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-neutral-950">
+                <p className="text-sm text-neutral-500">Loading…</p>
+            </div>
+        );
+    }
 
-  if (!isSuccess) return null;
+    if (!isSuccess) return null;
 
-  return <>{children}</>;
+    return <>{children}</>;
 }

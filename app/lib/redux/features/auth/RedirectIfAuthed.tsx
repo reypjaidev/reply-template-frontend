@@ -8,12 +8,12 @@ import { useGetCurrentUserQuery } from "./authApi";
 // No loading gate here — showing the form briefly for the common
 // (logged-out) case beats blocking every visit with a spinner.
 export function RedirectIfAuthed({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const { isSuccess } = useGetCurrentUserQuery();
+    const router = useRouter();
+    const { isSuccess } = useGetCurrentUserQuery();
 
-  useEffect(() => {
-    if (isSuccess) router.replace("/");
-  }, [isSuccess, router]);
+    useEffect(() => {
+        if (isSuccess) router.replace("/");
+    }, [isSuccess, router]);
 
-  return <>{children}</>;
+    return <>{children}</>;
 }
