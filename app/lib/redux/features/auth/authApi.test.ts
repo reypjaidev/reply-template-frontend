@@ -3,8 +3,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeStore } from "../../store";
 import { authApi } from "./authApi";
 
+// A fake user, used as the "logged in" user in every test below.
 const user = { id: "1", name: "Test", email: "test@example.com" };
 
+// Makes a fake fetch Response, like a real server would send: JSON data +
+// Content-Type header.
 function jsonResponse(body: unknown, status = 200) {
     return new Response(JSON.stringify(body), {
         status,
@@ -20,18 +23,24 @@ function toUrl(input: RequestInfo | URL): string {
     return input.url;
 }
 
+// Counts how many fetch() calls were made to a URL containing the given path.
 function countCallsTo(fetchMock: ReturnType<typeof vi.fn>, path: string) {
     return fetchMock.mock.calls.filter((call) =>
         toUrl(call[0] as RequestInfo | URL).includes(path),
     ).length;
 }
 
+// After each test, put global.fetch back to normal, so the fake fetch from
+// one test doesn't carry over into the next test.
 afterEach(() => {
     vi.unstubAllGlobals();
 });
 
+// These tests check that logging in or registering makes the app fetch the
+// current user again, so the app's data stays fresh (not old/stale).
 describe("authApi login/register cache invalidation", () => {
     it("refetches CurrentUser after a successful login", async () => {
+        // A fake server: it looks at the URL and sends back matching data.
         const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
             const url = toUrl(input);
             if (url.includes("/auth/login")) {
@@ -51,6 +60,7 @@ describe("authApi login/register cache invalidation", () => {
         await store.dispatch(authApi.endpoints.getCurrentUser.initiate());
         expect(countCallsTo(fetchMock, "/users")).toBe(1);
 
+        // Log in. This is the action we're testing.
         await store.dispatch(
             authApi.endpoints.login.initiate({
                 email: "test@example.com",
@@ -58,6 +68,7 @@ describe("authApi login/register cache invalidation", () => {
             }),
         );
 
+        // After login, the current-user data should be fetched again (1 -> 2).
         await waitFor(() => expect(countCallsTo(fetchMock, "/users")).toBe(2));
     });
 
@@ -79,6 +90,8 @@ describe("authApi login/register cache invalidation", () => {
         await store.dispatch(authApi.endpoints.getCurrentUser.initiate());
         expect(countCallsTo(fetchMock, "/users")).toBe(1);
 
+        // Register a new account. Same idea as login above: this should
+        // also refresh the current-user data.
         await store.dispatch(
             authApi.endpoints.register.initiate({
                 name: "Test",

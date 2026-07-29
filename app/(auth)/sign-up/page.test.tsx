@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SignUpPage from "./page";
 
+// Fake versions of Next.js router hooks, so the page doesn't need a real
+// router to render in a test.
 const mockRouter = { push: vi.fn(), replace: vi.fn() };
 const mockPathname = vi.fn(() => "/sign-up");
 vi.mock("next/navigation", () => ({
@@ -13,6 +15,7 @@ vi.mock("next/navigation", () => ({
 // Mock API calls
 const mockRegister = vi.fn();
 
+// Replace the real register API hook with a fake one we control in each test.
 vi.mock("@/app/lib/redux/features/auth/authApi", () => ({
     useRegisterMutation: () => [
         mockRegister,
@@ -21,6 +24,8 @@ vi.mock("@/app/lib/redux/features/auth/authApi", () => ({
 }));
 
 describe("SignUpPage", () => {
+    // Reset all fake functions before every test, so calls from one test
+    // don't affect the next one.
     beforeEach(() => {
         vi.clearAllMocks();
         mockRegister.mockReturnValue({ unwrap: vi.fn() });
@@ -49,6 +54,7 @@ describe("SignUpPage", () => {
 
     it("Should redirect to / after a successful sign-up", async () => {
         const user = userEvent.setup();
+        // Make the fake register call succeed and return a user.
         mockRegister.mockReturnValue({
             unwrap: vi.fn().mockResolvedValue({
                 user: { id: "1", name: "Test", email: "test@example.com" },
@@ -79,6 +85,7 @@ describe("SignUpPage", () => {
 
         render(<SignUpPage />);
 
+        // Type two different passwords in "password" and "confirm password".
         await user.type(screen.getByLabelText(/name/i), "test");
         await user.type(screen.getByLabelText(/email/i), "test@example.com");
         await user.type(screen.getByLabelText("password"), "password123");
@@ -88,6 +95,7 @@ describe("SignUpPage", () => {
         );
         await user.click(screen.getByRole("button", { name: "Sign up" }));
 
+        // The form should catch the mismatch itself, before calling the API.
         expect(
             await screen.findByText("Passwords do not match"),
         ).toBeInTheDocument();
@@ -97,6 +105,7 @@ describe("SignUpPage", () => {
 
     it("Should not redirect and should show an error when Sign up fails", async () => {
         const user = userEvent.setup();
+        // Make the fake register call fail, like a real server error.
         mockRegister.mockReturnValue({
             unwrap: vi.fn().mockRejectedValue({
                 status: 400,

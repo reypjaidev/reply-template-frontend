@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SignInPage from "./page";
 
+// Fake versions of Next.js router hooks, so the page doesn't need a real
+// router to render in a test.
 const mockRouter = { push: vi.fn(), replace: vi.fn() };
 const mockPathname = vi.fn(() => "/sign-in");
 vi.mock("next/navigation", () => ({
@@ -13,6 +15,7 @@ vi.mock("next/navigation", () => ({
 // Mock API calls
 const mockLogin = vi.fn();
 
+// Replace the real login API hook with a fake one we control in each test.
 vi.mock("@/app/lib/redux/features/auth/authApi", () => ({
     useLoginMutation: () => [
         mockLogin,
@@ -21,6 +24,8 @@ vi.mock("@/app/lib/redux/features/auth/authApi", () => ({
 }));
 
 describe("SignInPage", () => {
+    // Reset all fake functions before every test, so calls from one test
+    // don't affect the next one.
     beforeEach(() => {
         vi.clearAllMocks();
         mockLogin.mockReturnValue({ unwrap: vi.fn() });
@@ -49,6 +54,7 @@ describe("SignInPage", () => {
 
     it("Should redirect to / after a successful login", async () => {
         const user = userEvent.setup();
+        // Make the fake login call succeed and return a user.
         mockLogin.mockReturnValue({
             unwrap: vi.fn().mockResolvedValue({
                 user: { id: "1", name: "Test", email: "test@example.com" },
@@ -70,6 +76,7 @@ describe("SignInPage", () => {
 
     it("Should not redirect and should show an error when login fails", async () => {
         const user = userEvent.setup();
+        // Make the fake login call fail, like a real server error.
         mockLogin.mockReturnValue({
             unwrap: vi.fn().mockRejectedValue({
                 status: 401,

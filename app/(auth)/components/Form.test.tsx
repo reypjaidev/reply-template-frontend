@@ -17,17 +17,22 @@ describe("Form.Input", () => {
             />,
         );
 
+        // A password field should hide the text at first.
         const input = screen.getByDisplayValue("secret123");
         expect(input).toHaveAttribute("type", "password");
 
+        // Click "Show Password" and the text should become visible.
         await user.click(screen.getByRole("button", { name: "Show Password" }));
         expect(input).toHaveAttribute("type", "text");
 
+        // Click "Hide Password" and it should go back to hidden.
         await user.click(screen.getByRole("button", { name: "Hide Password" }));
         expect(input).toHaveAttribute("type", "password");
     });
 
     it("gives each password field its own distinct toggle label", () => {
+        // Render two password fields side by side (like password + confirm
+        // password), and check each one gets its own "Show" button label.
         render(
             <>
                 <Form.Input
@@ -58,6 +63,7 @@ describe("Form.Input", () => {
     });
 
     it("does not render a visibility toggle for non-password fields", () => {
+        // A non-password field (like email) should have no show/hide button.
         render(
             <Form.Input
                 placeholder="Email"

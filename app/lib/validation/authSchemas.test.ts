@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { signInSchema, signUpSchema } from "./authSchemas";
 
+// signInSchema checks that sign-in form data (email + password) is valid.
 describe("signInSchema", () => {
     it("accepts a valid email and password", () => {
         const result = signInSchema.safeParse({
@@ -35,7 +36,11 @@ describe("signInSchema", () => {
     });
 });
 
+// signUpSchema checks that sign-up form data (name, email, password, and
+// confirm password) is valid.
 describe("signUpSchema", () => {
+    // A valid, working set of sign-up data, used as a base for each test
+    // (each test only changes the one field it wants to check).
     const validInput = {
         name: "Test User",
         email: "test@example.com",
@@ -76,6 +81,8 @@ describe("signUpSchema", () => {
             confirmPassword: "different123",
         });
         expect(result.success).toBe(false);
+        // Also check that the error points at the right field, with a
+        // clear message the user would understand.
         if (!result.success) {
             expect(result.error.issues[0].path).toEqual(["confirmPassword"]);
             expect(result.error.issues[0].message).toBe(
