@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "**/(protected)/**/*.ts": "typescript",
+        "**/(protected)/**/*.tsx": "typescriptreact",
+        "**/(protected)/**/*.js": "javascript",
+        "**/(protected)/**/*.json": "json"
+    }
+}
