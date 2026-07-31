@@ -12,7 +12,7 @@ export function RedirectIfAuthed({ children }: { children: React.ReactNode }) {
     const { isSuccess } = useGetCurrentUserQuery();
 
     useEffect(() => {
-        if (isSuccess) router.replace("/");
+        if (isSuccess) router.replace("/templates");
     }, [isSuccess, router]);
 
     return <>{children}</>;

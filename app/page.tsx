@@ -1,10 +1,5 @@
-import { NoteBoard } from "./_components/NoteBoard";
-import { RequireAuth } from "./lib/redux/features/auth/RequireAuth";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-    return (
-        <RequireAuth>
-            <NoteBoard />
-        </RequireAuth>
-    );
+    redirect("/templates");
 }

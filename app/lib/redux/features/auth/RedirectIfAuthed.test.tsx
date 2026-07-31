@@ -34,7 +34,7 @@ describe("RedirectIfAuthed", () => {
 
         // It should send the user to the home page instead of showing the form.
         await waitFor(() =>
-            expect(mockRouter.replace).toHaveBeenCalledWith("/"),
+            expect(mockRouter.replace).toHaveBeenCalledWith("/templates"),
         );
     });
 
