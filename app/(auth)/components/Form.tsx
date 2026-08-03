@@ -54,7 +54,7 @@ const FormContainer = ({
                 type="submit"
                 disabled={isSubmitting}
                 className={cslx(
-                    "w-full h-11 rounded-full text-white bg-indigo-600 hover:bg-indigo-500 transition disabled:cursor-not-allowed disabled:opacity-60",
+                    "w-full h-11 cursor-pointer rounded-full text-white bg-indigo-600 hover:bg-indigo-500 transition disabled:cursor-not-allowed disabled:opacity-60",
                     isLogin ? "mt-2" : "mt-4",
                 )}
             >
@@ -107,7 +107,7 @@ const FormInput = ({
                     type="button"
                     onClick={() => setPasswordVisible((v) => !v)}
                     aria-label={`${passwordVisible ? "Hide" : "Show"} ${placeholder}`}
-                    className="shrink-0 text-white/60 hover:text-white/90 transition-colors"
+                    className="shrink-0 cursor-pointer text-white/60 hover:text-white/90 transition-colors"
                 >
                     {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
                 </button>

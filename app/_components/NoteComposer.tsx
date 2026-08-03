@@ -72,7 +72,7 @@ export function NoteComposer({
                                 type="button"
                                 aria-label={c}
                                 onClick={() => setColor(c)}
-                                className={`h-5 w-5 rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
+                                className={`h-5 w-5 cursor-pointer rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
                                     c === color
                                         ? "outline outline-2 outline-neutral-400"
                                         : ""
@@ -83,7 +83,7 @@ export function NoteComposer({
                     <button
                         type="button"
                         onClick={handleSave}
-                        className="rounded-md bg-neutral-800 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-700"
+                        className="cursor-pointer rounded-md bg-neutral-800 px-3 py-1 text-xs font-medium text-white hover:bg-neutral-700"
                     >
                         Save
                     </button>

@@ -30,7 +30,7 @@ export function NoteCard({
                 type="button"
                 onClick={onDelete}
                 aria-label="Delete note"
-                className="absolute right-2 top-2 rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/5 hover:text-neutral-800 group-hover:opacity-100"
+                className="absolute right-2 top-2 cursor-pointer rounded p-1 text-neutral-500 opacity-0 transition-opacity hover:bg-black/5 hover:text-neutral-800 group-hover:opacity-100"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ export function NoteCard({
                         type="button"
                         onClick={() => setShowColors((v) => !v)}
                         aria-label="Change color"
-                        className={`h-5 w-5 rounded-full ring-1 ring-black/10 ${colors.swatch}`}
+                        className={`h-5 w-5 cursor-pointer rounded-full ring-1 ring-black/10 ${colors.swatch}`}
                     />
                     {showColors && (
                         <div className="absolute bottom-7 left-0 z-10 flex gap-1 rounded-full border border-neutral-200 bg-white p-1.5 shadow-md">
@@ -79,7 +79,7 @@ export function NoteCard({
                                         onUpdate({ color: c });
                                         setShowColors(false);
                                     }}
-                                    className={`h-5 w-5 rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
+                                    className={`h-5 w-5 cursor-pointer rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
                                         c === note.color
                                             ? "outline outline-2 outline-neutral-400"
                                             : ""
@@ -93,7 +93,7 @@ export function NoteCard({
                 <button
                     type="button"
                     onClick={handleCopy}
-                    className="rounded-md px-2.5 py-1 text-xs font-medium text-neutral-600 transition-colors hover:bg-black/5"
+                    className="cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium text-neutral-600 transition-colors hover:bg-black/5"
                 >
                     {copied ? "Copied!" : "Copy"}
                 </button>

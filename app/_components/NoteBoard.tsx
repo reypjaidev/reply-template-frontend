@@ -36,7 +36,7 @@ export function NoteBoard() {
                         type="button"
                         onClick={handleLogout}
                         disabled={isLoggingOut}
-                        className="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-500 transition-colors hover:bg-black/5 hover:text-neutral-800 disabled:opacity-60"
+                        className="cursor-pointer rounded-md px-3 py-1.5 text-sm font-medium text-neutral-500 transition-colors hover:bg-black/5 hover:text-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoggingOut ? "Logging out…" : "Log out"}
                     </button>
