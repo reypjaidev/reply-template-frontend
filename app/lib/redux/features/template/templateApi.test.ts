@@ -7,7 +7,7 @@ import { templateApi } from "./templateApi";
 const template = {
     id: "t1",
     title: "Follow up",
-    content: "Thanks for reaching out...",
+    body: "Thanks for reaching out...",
     createdAt: "2026-01-01T00:00:00.000Z",
     updatedAt: "2026-01-01T00:00:00.000Z",
 };
@@ -89,7 +89,7 @@ describe("templateApi cache invalidation", () => {
         await store.dispatch(
             templateApi.endpoints.createTemplate.initiate({
                 title: "Follow up",
-                content: "Thanks for reaching out...",
+                body: "Thanks for reaching out...",
             }),
         );
 

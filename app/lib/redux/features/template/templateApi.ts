@@ -1,3 +1,4 @@
+import { NoteColor } from "@/app/_lib/types";
 import { api } from "../../api";
 
 // Matches backend's utils/response.ts sendSuccess() envelope.
@@ -7,20 +8,23 @@ type ApiEnvelope<T> = { success: true; data: T };
 export type Template = {
     id: string;
     title: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
+    body: string;
+    color: NoteColor;
+    createdAt: number;
+    updatedAt: number;
 };
 
 type CreateTemplateRequest = {
     title: string;
-    content: string;
+    body: string;
+    color: NoteColor;
 };
 
 type UpdateTemplateRequest = {
     id: string;
     title?: string;
-    content?: string;
+    body?: string;
+    color?: NoteColor;
 };
 
 export const templateApi = api.injectEndpoints({
