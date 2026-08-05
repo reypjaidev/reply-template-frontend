@@ -5,6 +5,8 @@ export default function Page() {
         <Template.Container>
             <Template.Header />
             <Template.Search />
+            <Template.Form />
+            <Template.Cards />
         </Template.Container>
     );
 }
