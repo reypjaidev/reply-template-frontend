@@ -71,8 +71,10 @@ describe("RequireAuth", () => {
             </RequireAuth>,
         );
 
-        // While loading, show a loading message instead of content or a redirect.
-        expect(screen.getByText(/Loading…/i)).toBeInTheDocument();
+        // While loading, show the loader instead of content or a redirect.
+        expect(
+            screen.getByRole("status", { name: /loading/i }),
+        ).toBeInTheDocument();
         expect(mockRouter.replace).not.toHaveBeenCalled();
     });
 });

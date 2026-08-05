@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Loader from "@/app/_components/Loader";
 import { useGetCurrentUserQuery } from "./authApi";
 
 // Client-side gate: relies on the cross-origin getCurrentUser fetch (shared
@@ -19,7 +20,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     if (isLoading) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-neutral-950">
-                <p className="text-sm text-neutral-500">Loading…</p>
+                <Loader />
             </div>
         );
     }
