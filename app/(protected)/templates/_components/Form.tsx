@@ -15,7 +15,7 @@ function TemplateForm() {
     const [color, setColor] = useState<NoteColor>("gray");
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const [create, { isLoading }] = useCreateTemplateMutation();
+    const [create] = useCreateTemplateMutation();
 
     function reset() {
         setTitle("");
@@ -23,7 +23,6 @@ function TemplateForm() {
         setColor("gray");
         setExpanded(false);
     }
-    console.log(color);
     function handleSave() {
         if (!title.trim() && !body.trim()) {
             reset();
@@ -73,7 +72,7 @@ function TemplateForm() {
                                 onClick={() => setColor(c)}
                                 className={`h-5 w-5 cursor-pointer rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
                                     c === color
-                                        ? "outline outline-2 outline-neutral-400"
+                                        ? "outline-2 outline-neutral-400"
                                         : ""
                                 }`}
                             />
