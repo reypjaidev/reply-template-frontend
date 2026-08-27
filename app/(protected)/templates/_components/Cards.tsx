@@ -13,10 +13,12 @@ import { useDebouncedCallback } from "use-debounce";
 
 function Cards() {
     const [cards, setCards] = useState<Note[]>([]);
-    const { data, isLoading } = useGetTemplatesQuery();
+    const { data, isLoading } = useGetTemplatesQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
 
     useEffect(() => {
-        if (data) {
+        if (data && !isLoading) {
             setCards(data);
         }
     }, [data, isLoading]);
