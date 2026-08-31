@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Loader from "@/app/_components/Loader";
+import Loader from "@/app/components/Loader";
 import { useGetCurrentUserQuery } from "./authApi";
 
 // Client-side gate: relies on the cross-origin getCurrentUser fetch (shared

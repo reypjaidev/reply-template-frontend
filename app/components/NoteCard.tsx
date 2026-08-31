@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { NOTE_COLOR_ORDER, NOTE_COLORS, type Note } from "../_lib/types";
+import { NOTE_COLOR_ORDER, NOTE_COLORS, type Note } from "../lib/types";
 
 export function NoteCard({
     note,

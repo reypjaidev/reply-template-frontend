@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { NOTE_COLOR_ORDER, NOTE_COLORS, type NoteColor } from "../_lib/types";
+import { NOTE_COLOR_ORDER, NOTE_COLORS, type NoteColor } from "../lib/types";
 
 export function NoteComposer({
     onCreate,

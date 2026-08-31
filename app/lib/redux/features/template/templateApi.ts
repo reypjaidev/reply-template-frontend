@@ -1,4 +1,4 @@
-import { NoteColor } from "@/app/_lib/types";
+import { NoteColor } from "@/app/lib/types";
 import { api } from "../../api";
 
 // Matches backend's utils/response.ts sendSuccess() envelope.

@@ -1,4 +1,4 @@
-import Background from "./_components/Background";
+import Background from "./components/Background";
 import "./globals.css";
 import { StoreProvider } from "./lib/redux/StoreProvider";
 import { AuthInitializer } from "./lib/redux/features/auth/AuthInitializer";

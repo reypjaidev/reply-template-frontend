@@ -1,8 +1,8 @@
 "use client";
 
-import Loader from "@/app/_components/Loader";
-import { NoteCard } from "@/app/_components/NoteCard";
-import { Note } from "@/app/_lib/types";
+import Loader from "@/app/components/Loader";
+import { NoteCard } from "@/app/components/NoteCard";
+import { Note } from "@/app/lib/types";
 import {
     useDeleteTemplateMutation,
     useGetTemplatesQuery,
