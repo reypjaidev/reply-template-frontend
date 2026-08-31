@@ -1,12 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-    NOTE_COLOR_ORDER,
-    NOTE_COLORS,
-    type NoteColor,
-} from "@/app/_lib/types";
+import { NOTE_COLOR_ORDER, NOTE_COLORS, type NoteColor } from "@/app/lib/types";
 import { useCreateTemplateMutation } from "@/app/lib/redux/features/template/templateApi";
+import { toast, Toaster } from "sonner";
 
 function TemplateForm() {
     const [expanded, setExpanded] = useState(false);
@@ -28,7 +25,14 @@ function TemplateForm() {
             reset();
             return;
         }
-        create({ title, body, color });
+        create({ title, body, color })
+            .unwrap()
+            .then(() => {
+                toast.success("Template created successfully");
+            })
+            .catch(() => {
+                toast.error("Failed to create template");
+            });
         reset();
     }
 
@@ -44,6 +48,7 @@ function TemplateForm() {
             onBlur={handleBlur}
             className="mx-auto mb-8 max-w-xl rounded-lg border border-neutral-200 bg-white p-3 shadow-sm"
         >
+            <Toaster position="top-center" richColors />
             {expanded && (
                 <input
                     value={title}
