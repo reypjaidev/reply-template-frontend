@@ -7,8 +7,10 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { credentialsCleared } from "./features/auth/authSlice";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const rawBaseQuery = fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL, // e.g. http://localhost:4000/api/v1
+    baseUrl: isProd ? process.env.API_URL : process.env.NEXT_PUBLIC_API_URL, // e.g. http://localhost:4000/api/v1
     // accessToken/refreshToken are httpOnly cookies — this is what makes the
     // browser attach and update them automatically, there's nothing to store
     // or attach as a header on our end.
