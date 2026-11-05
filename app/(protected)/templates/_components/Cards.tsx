@@ -10,6 +10,7 @@ import {
 } from "@/app/lib/redux/features/template/templateApi";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { toast } from "sonner";
 
 function Cards() {
     const [cards, setCards] = useState<Note[]>([]);
@@ -29,20 +30,28 @@ function Cards() {
         updateTemplate(value)
             .unwrap()
             .then((data) => {
-                console.log("Updated template:", data);
+                toast.success(`Template ${data.title} updated`);
             })
-            .catch((error) => {
-                console.error("Failed to update template:", error);
+            .catch(() => {
+                toast.error(`Template failed to update`);
             });
     }, 1000);
     const updateNote = (id: string, patch: Partial<Note>) => {
         setCards((prev) =>
             prev.map((note) => (note.id === id ? { ...note, ...patch } : note)),
         );
+
         debounced({ id, ...patch });
     };
     const deleteNote = (id: string) => {
-        deleteTemplate(id);
+        deleteTemplate(id)
+            .unwrap()
+            .then(() => {
+                toast.success("Template deleted");
+            })
+            .catch(() => {
+                toast.error("Failed to delete template");
+            });
     };
     if (isLoading) {
         return <Loader />;

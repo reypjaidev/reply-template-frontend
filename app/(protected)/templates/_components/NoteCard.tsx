@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { NOTE_COLOR_ORDER, NOTE_COLORS, type Note } from "../../../lib/types";
+import { toast } from "sonner";
 
 export function NoteCard({
     note,
@@ -19,6 +20,7 @@ export function NoteCard({
     async function handleCopy() {
         await navigator.clipboard.writeText(note.body);
         setCopied(true);
+        toast.success("Copied to clipboard");
         setTimeout(() => setCopied(false), 1500);
     }
 
@@ -45,7 +47,6 @@ export function NoteCard({
                     />
                 </svg>
             </button>
-
             <input
                 value={note.title}
                 onChange={(e) => onUpdate({ title: e.target.value })}
@@ -59,7 +60,6 @@ export function NoteCard({
                 rows={4}
                 className="mt-1 w-full resize-none bg-transparent text-sm text-neutral-700 placeholder:text-neutral-400 focus:outline-none"
             />
-
             <div className="mt-2 flex items-center justify-between">
                 <div className="relative">
                     <button
