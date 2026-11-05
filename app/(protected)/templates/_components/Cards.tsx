@@ -1,7 +1,7 @@
 "use client";
 
 import Loader from "@/app/components/Loader";
-import { NoteCard } from "@/app/components/NoteCard";
+import { NoteCard } from "@/app/(protected)/templates/_components/NoteCard";
 import { Note } from "@/app/lib/types";
 import {
     useDeleteTemplateMutation,
