@@ -12,6 +12,9 @@ const rawBaseQuery = fetchBaseQuery({
     // accessToken/refreshToken are httpOnly cookies — this is what makes the
     // browser attach and update them automatically, there's nothing to store
     // or attach as a header on our end.
+    prepareHeaders: (headers) => {
+        return headers;
+    },
     credentials: "include",
 });
 
