@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/* 1. Modern W3C Standard Syntax (Firefox & modern engines) */
+html {
+    scrollbar-color: #5f9e98 #0b4f4a; /* thumb color | track color */
+    scrollbar-width: thin; /* options: auto | thin | none */
+}
+
+/* 2. WebKit Syntax (Chrome, Safari, Edge, Opera) */
+/* Total width of the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px; /* for horizontal scrollbars */
+}
+
+/* The background track */
+::-webkit-scrollbar-track {
+    background: #0b4f4a;
+}
+
+/* The draggable handle */
+::-webkit-scrollbar-thumb {
+    background: #5f9e98;
+    border-radius: 5px;
+}
+
+/* The handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #467873;
+}
