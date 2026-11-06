@@ -9,6 +9,7 @@ import { Form } from "../components/Form";
 import EmailIcon from "../components/icons/EmailIcon";
 import PasswordIcon from "../components/icons/PasswordIcon";
 import UserIcon from "../components/icons/UserIcon";
+import { toast } from "sonner";
 
 function Page() {
     const router = useRouter();
@@ -38,6 +39,7 @@ function Page() {
         try {
             const { name, email, password } = result.data;
             await register({ name, email, password }).unwrap();
+            toast.success("Account created successfully!");
             router.push("/");
         } catch (err) {
             setError(getErrorMessage(err));
