@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "pnpm run test &&next build",
+        "build": "npm run test && next build",
         "start": "next start",
         "lint": "eslint",
         "test": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest",
