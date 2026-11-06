@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SignUpPage from "./page";
+import { toast } from "sonner";
 
 // Fake versions of Next.js router hooks, so the page doesn't need a real
 // router to render in a test.
@@ -52,8 +53,9 @@ describe("SignUpPage", () => {
         ).toBeInTheDocument();
     });
 
-    it("Should redirect to / after a successful sign-up", async () => {
+    it("Should redirect to / and show a success toast after a successful sign-up", async () => {
         const user = userEvent.setup();
+        const toastMessage = "Account created successfully!";
         // Make the fake register call succeed and return a user.
         mockRegister.mockReturnValue({
             unwrap: vi.fn().mockResolvedValue({
@@ -78,6 +80,7 @@ describe("SignUpPage", () => {
             password: "password123",
         });
         await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/"));
+        expect(toast.success).toHaveBeenCalledWith(toastMessage);
     });
 
     it("Should show an error and not call register when passwords don't match", async () => {
