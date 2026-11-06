@@ -4,10 +4,11 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "npm run test && next build",
+        "build": "npm run test:run && next build",
         "start": "next start",
         "lint": "eslint",
         "test": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest",
+        "test:run": "NODE_ENV=test vitest run",
         "prepare": "husky",
         "format": "prettier --write ."
     },
