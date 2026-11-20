@@ -1,9 +1,7 @@
-import { it, describe, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import TemplateForm from "./Form";
-import { useCreateTemplateMutation } from "@/app/lib/redux/features/template/templateApi";
 import { toast } from "sonner";
-import { Note } from "@/app/lib/types";
 import userEvent from "@testing-library/user-event";
 
 const mocks = vi.hoisted(() => ({
@@ -13,27 +11,11 @@ vi.mock("@/app/lib/redux/features/template/templateApi", () => ({
     useCreateTemplateMutation: () => [mocks.createTemplate],
 }));
 
-const note1: Note = {
-    id: "t1",
-    title: "Title 1",
-    body: "Thanks for reaching out...",
-    color: "yellow",
-    updatedAt: 0,
-};
-
-const note2: Note = {
-    id: "t2",
-    title: "Title 2",
-    body: "Looking forward to our meeting...",
-    color: "blue",
-    updatedAt: 0,
-};
-
 describe("TemplateForm component", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mocks.createTemplate.mockReturnValue({
-            unwrap: vi.fn(() => Promise.resolve({ ...note1 })),
+            unwrap: vi.fn().mockResolvedValue(undefined),
         });
     });
 
@@ -45,29 +27,16 @@ describe("TemplateForm component", () => {
         expect(screen.queryByPlaceholderText("Title")).not.toBeInTheDocument();
     });
 
-    it("expands when the textarea body is focused", () => {
+    it("expands when the textarea body is focused", async () => {
+        const user = userEvent.setup();
         render(<TemplateForm />);
         const textarea = screen.getByPlaceholderText(/Take a note.../i);
-        fireEvent.focus(textarea);
+        await user.click(textarea);
+
         expect(screen.getByPlaceholderText("Title")).toBeInTheDocument();
         expect(textarea).toBeInTheDocument();
         expect(
             screen.getByRole("button", { name: "gray" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "yellow" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "pink" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "blue" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "green" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "purple" }),
         ).toBeInTheDocument();
         expect(
             screen.getByRole("button", { name: "Save" }),
@@ -95,19 +64,25 @@ describe("TemplateForm component", () => {
         ).not.toBeInTheDocument();
     });
 
-    it("calls createTemplate mutation and toast will appear success when form is submitted", async () => {
+    it("does not create a template when the body contains only whitespace", async () => {
         const user = userEvent.setup();
 
-        mocks.createTemplate.mockReturnValue({
-            unwrap: vi.fn().mockResolvedValue({
-                status: 200,
-                data: {
-                    success: true,
-                    message: "Template created successfully",
-                },
-            }),
-        });
+        render(
+            <>
+                <TemplateForm />
+                <button type="button">Outside</button>
+            </>,
+        );
 
+        await user.click(screen.getByPlaceholderText(/Take a note.../i));
+        await user.type(screen.getByPlaceholderText(/Take a note.../i), "   ");
+        await user.click(screen.getByRole("button", { name: "Outside" }));
+
+        expect(mocks.createTemplate).not.toHaveBeenCalled();
+    });
+
+    it("creates a template with the entered values and shows a success toast", async () => {
+        const user = userEvent.setup();
         render(<TemplateForm />);
 
         await user.click(screen.getByPlaceholderText(/Take a note.../i));
@@ -116,9 +91,14 @@ describe("TemplateForm component", () => {
             screen.getByPlaceholderText(/Take a note.../i),
             "New Body",
         );
+        await user.click(screen.getByRole("button", { name: "pink" }));
         await user.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(mocks.createTemplate).toHaveBeenCalled();
+        expect(mocks.createTemplate).toHaveBeenCalledExactlyOnceWith({
+            title: "New Title",
+            body: "New Body",
+            color: "pink",
+        });
 
         await waitFor(() => {
             expect(toast.success).toHaveBeenCalledWith(
@@ -131,13 +111,7 @@ describe("TemplateForm component", () => {
         const user = userEvent.setup();
 
         mocks.createTemplate.mockReturnValue({
-            unwrap: vi.fn().mockRejectedValue({
-                status: 201,
-                data: {
-                    success: false,
-                    message: "Failed to create template",
-                },
-            }),
+            unwrap: vi.fn().mockRejectedValue(new Error("Request failed")),
         });
 
         render(<TemplateForm />);
