@@ -1,14 +1,19 @@
 "use client";
 
 import { useLogoutMutation } from "@/app/lib/redux/features/auth/authApi";
-import { useRouter } from "next/dist/client/components/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const TemplateHeader = () => {
     const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
     const router = useRouter();
     const handleLogout = async () => {
-        await logout();
-        router.replace("/sign-in");
+        try {
+            await logout().unwrap();
+            router.replace("/sign-in");
+        } catch {
+            toast.error("Failed to log out");
+        }
     };
     return (
         <header className="mb-8 text-center">
