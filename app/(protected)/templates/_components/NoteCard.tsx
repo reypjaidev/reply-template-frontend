@@ -76,12 +76,15 @@ export function NoteCard({
                                     type="button"
                                     aria-label={c}
                                     onClick={() => {
-                                        onUpdate({ color: c });
+                                        if (c !== note.color) {
+                                            onUpdate({ color: c });
+                                        }
                                         setShowColors(false);
+                                        return;
                                     }}
                                     className={`h-5 w-5 cursor-pointer rounded-full ring-1 ring-black/10 ${NOTE_COLORS[c].swatch} ${
                                         c === note.color
-                                            ? "outline outline-2 outline-neutral-400"
+                                            ? "outline-2 outline-neutral-400"
                                             : ""
                                     }`}
                                 />
