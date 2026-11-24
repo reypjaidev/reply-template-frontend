@@ -44,8 +44,8 @@ describe("signUpSchema", () => {
     const validInput = {
         name: "Test User",
         email: "test@example.com",
-        password: "password123",
-        confirmPassword: "password123",
+        password: "Password123!",
+        confirmPassword: "Password123!",
     };
 
     it("accepts valid, matching input", () => {
@@ -78,7 +78,7 @@ describe("signUpSchema", () => {
     it("rejects when confirmPassword does not match password", () => {
         const result = signUpSchema.safeParse({
             ...validInput,
-            confirmPassword: "different123",
+            confirmPassword: "Different123!",
         });
         expect(result.success).toBe(false);
         // Also check that the error points at the right field, with a

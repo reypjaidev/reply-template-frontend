@@ -67,17 +67,17 @@ describe("SignUpPage", () => {
 
         await user.type(screen.getByLabelText(/name/i), "test");
         await user.type(screen.getByLabelText(/email/i), "test@example.com");
-        await user.type(screen.getByLabelText("password"), "password123");
+        await user.type(screen.getByLabelText("password"), "Password123!");
         await user.type(
             screen.getByLabelText("confirmPassword"),
-            "password123",
+            "Password123!",
         );
         await user.click(screen.getByRole("button", { name: "Sign up" }));
 
         expect(mockRegister).toHaveBeenCalledWith({
             name: "test",
             email: "test@example.com",
-            password: "password123",
+            password: "Password123!",
         });
         await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith("/"));
         expect(toast.success).toHaveBeenCalledWith(toastMessage);
@@ -91,10 +91,10 @@ describe("SignUpPage", () => {
         // Type two different passwords in "password" and "confirm password".
         await user.type(screen.getByLabelText(/name/i), "test");
         await user.type(screen.getByLabelText(/email/i), "test@example.com");
-        await user.type(screen.getByLabelText("password"), "password123");
+        await user.type(screen.getByLabelText("password"), "Password123!");
         await user.type(
             screen.getByLabelText("confirmPassword"),
-            "different123",
+            "Different123!",
         );
         await user.click(screen.getByRole("button", { name: "Sign up" }));
 
@@ -106,7 +106,7 @@ describe("SignUpPage", () => {
         expect(mockRouter.push).not.toHaveBeenCalled();
     });
 
-    it("Should show the password requirement and validation error for a short password", async () => {
+    it("Should show all password validation errors for an invalid password", async () => {
         const user = userEvent.setup();
 
         render(<SignUpPage />);
@@ -126,6 +126,19 @@ describe("SignUpPage", () => {
         expect(
             await screen.findByText("Password must be at least 8 characters"),
         ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Password must contain at least one uppercase letter",
+            ),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Password must contain at least one number"),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Password must contain at least one special character",
+            ),
+        ).toBeInTheDocument();
         expect(mockRegister).not.toHaveBeenCalled();
     });
 
@@ -142,10 +155,10 @@ describe("SignUpPage", () => {
         render(<SignUpPage />);
         await user.type(screen.getByLabelText(/name/i), "test");
         await user.type(screen.getByLabelText(/email/i), "test@example.com");
-        await user.type(screen.getByLabelText("password"), "password123");
+        await user.type(screen.getByLabelText("password"), "Password123!");
         await user.type(
             screen.getByLabelText("confirmPassword"),
-            "password123",
+            "Password123!",
         );
         await user.click(screen.getByRole("button", { name: "Sign up" }));
 

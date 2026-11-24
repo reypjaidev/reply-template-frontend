@@ -19,11 +19,11 @@ function Page() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
+    const [errors, setErrors] = useState<string[]>([]);
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError(null);
+        setErrors([]);
 
         const result = signUpSchema.safeParse({
             name,
@@ -32,7 +32,7 @@ function Page() {
             confirmPassword,
         });
         if (!result.success) {
-            setError(result.error.issues[0].message);
+            setErrors(result.error.issues.map((issue) => issue.message));
             return;
         }
 
@@ -42,7 +42,7 @@ function Page() {
             toast.success("Account created successfully!");
             router.push("/");
         } catch (err) {
-            setError(getErrorMessage(err));
+            setErrors([getErrorMessage(err)]);
         }
     };
 
@@ -104,10 +104,15 @@ function Page() {
                 type="password"
                 value={confirmPassword}
             />
-            {error && (
-                <p aria-live="polite" className="mt-3 text-sm text-red-400">
-                    {error}
-                </p>
+            {errors.length > 0 && (
+                <ul
+                    aria-live="polite"
+                    className="mt-3 list-disc space-y-1 pl-6 text-left text-sm text-red-400"
+                >
+                    {errors.map((error, index) => (
+                        <li key={`${error}-${index}`}>{error}</li>
+                    ))}
+                </ul>
             )}
         </Form.Form>
     );
