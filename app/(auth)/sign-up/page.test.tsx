@@ -106,6 +106,29 @@ describe("SignUpPage", () => {
         expect(mockRouter.push).not.toHaveBeenCalled();
     });
 
+    it("Should show the password requirement and validation error for a short password", async () => {
+        const user = userEvent.setup();
+
+        render(<SignUpPage />);
+
+        expect(
+            screen.getByText(
+                "Use at least 8 characters, including an uppercase letter, a number, and a special character.",
+            ),
+        ).toBeInTheDocument();
+
+        await user.type(screen.getByLabelText(/name/i), "test");
+        await user.type(screen.getByLabelText(/email/i), "test@example.com");
+        await user.type(screen.getByLabelText("password"), "short");
+        await user.type(screen.getByLabelText("confirmPassword"), "short");
+        await user.click(screen.getByRole("button", { name: "Sign up" }));
+
+        expect(
+            await screen.findByText("Password must be at least 8 characters"),
+        ).toBeInTheDocument();
+        expect(mockRegister).not.toHaveBeenCalled();
+    });
+
     it("Should not redirect and should show an error when Sign up fails", async () => {
         const user = userEvent.setup();
         // Make the fake register call fail, like a real server error.

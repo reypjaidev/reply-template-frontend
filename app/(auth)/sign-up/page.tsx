@@ -92,6 +92,10 @@ function Page() {
                 type="password"
                 value={password}
             />
+            <p className="mt-2 px-6 text-left text-xs text-gray-400">
+                Use at least 8 characters, including an uppercase letter, a
+                number, and a special character.
+            </p>
             <Form.Input
                 placeholder="Confirm password"
                 onChange={handleConfirmPasswordChange}
@@ -100,7 +104,11 @@ function Page() {
                 type="password"
                 value={confirmPassword}
             />
-            {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+            {error && (
+                <p aria-live="polite" className="mt-3 text-sm text-red-400">
+                    {error}
+                </p>
+            )}
         </Form.Form>
     );
 }
